@@ -14,5 +14,6 @@ public class PingTestController {
     }
 
 //1. Create a new controller called PingTestController.java
+//2. Add the following code to the PingTestController.java file:
 
 }
