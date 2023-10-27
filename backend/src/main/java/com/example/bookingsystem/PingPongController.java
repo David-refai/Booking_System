@@ -14,5 +14,5 @@ public class PingPongController {
         return new PingPongResponse("pong from booking system test 2");
     }
 
-
+//1. Create a new controller called PingTestController.java
 }
