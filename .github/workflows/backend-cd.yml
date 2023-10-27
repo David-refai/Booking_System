@@ -28,6 +28,18 @@ jobs:
       run:
         working-directory: ./backend
     steps:
+      - name : Send Slack Notification
+        uses: rtCamp/action-slack-notify@v2.0.0
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
+          SLACK_USERNAME: ${{ secrets.SLACK_USERNAME }}
+          SLACK_MESSAGE: "Deploying Booking System Backend"
+          SLACK_COLOR: "#36a64f"
+          SLACK_ICON: "https://avatars.githubusercontent.com/u/890851?s=200&v=4"
+          SLACK_TITLE: "Booking System Backend"
+
+
       - name: checkout code
         uses: actions/checkout@v2
       - name: Set up JDK 17
@@ -41,13 +53,39 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD_TOKEN }}
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2.0.0
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
+          SLACK_USERNAME: ${{ secrets.SLACK_USERNAME }}
+          SLACK_MESSAGE: "Docker Login Successful ✌️"
+          SLACK_COLOR: "#36a64f"
+          SLACK_ICON: "https://avatars.githubusercontent.com/u/890851?s=200&v=4"
       - name: Set build number
         id: build-number
         run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
-
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2.0.0
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
+          SLACK_USERNAME: ${{ secrets.SLACK_USERNAME }}
+          SLACK_MESSAGE: "Build Number: ${{ steps.build-number.outputs.BUILD_NUMBER }}"
+          SLACK_COLOR: "#36a64f"
+          SLACK_ICON: "https://avatars.githubusercontent.com/u/890851?s=200&v=4"
       - name: Build Package Push with Maven
         run: mvn -ntp -B verify -Ddocker.image.tags=${{ steps.build-number.outputs.BUILD_NUMBER }} jib:build
 
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2.0.0
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
+          SLACK_USERNAME: ${{ secrets.SLACK_USERNAME }}
+          SLACK_MESSAGE: "Build Successful ✌️"
+          SLACK_COLOR: "#36a64f"
+          SLACK_ICON: "https://avatars.githubusercontent.com/u/890851?s=200&v=4"
       - name: Update Dockerrun.aws.json api image tag with build number
         run: |
           echo "Updating Dockerrun.aws.json before updating Elastic Beanstalk"
@@ -55,6 +93,16 @@ jobs:
           sed -i -E 's_(davidrefai/booking-system:)([^"]*)_\1'${{steps.build-number.outputs.BUILD_NUMBER}}'_' Dockerrun.aws.json
           echo "Updated Dockerrun.aws.json after updating Elastic Beanstalk"
           cat Dockerrun.aws.json
+
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2.0.0
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
+          SLACK_USERNAME: ${{ secrets.SLACK_USERNAME }}
+          SLACK_MESSAGE: "Updating Dockerrun.aws.json with new image tag"
+          SLACK_COLOR: "#36a64f"
+          SLACK_ICON: "https://avatars.githubusercontent.com/u/890851?s=200&v=4"
 
       - name: Deploy to AWS Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v21
@@ -69,6 +117,16 @@ jobs:
               deployment_package: backend/Dockerrun.aws.json
 #              wait_for_deployment: true
 #              ignore_filenames: "Dockerrun.aws.json"
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2.0.0
+        env:
+            SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+            SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
+            SLACK_USERNAME: ${{ secrets.SLACK_USERNAME }}
+            SLACK_MESSAGE: "Deployed to AWS Elastic Beanstalk"
+            SLACK_COLOR: "#36a64f"
+            SLACK_ICON: "https://avatars.githubusercontent.com/u/890851?s=200&v=4"
+
       - name: Commit and push Dockerrun.aws.json
         run: |
           git config  user.name "github-actions"
@@ -76,3 +134,13 @@ jobs:
           git add .
           git commit -m "Update Dockerrun.aws.json with new image tag"
           git push
+
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2.0.0
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
+          SLACK_USERNAME: ${{ secrets.SLACK_USERNAME }}
+          SLACK_MESSAGE: "Pushed Dockerrun.aws.json to Github"
+          SLACK_COLOR: "#36a64f"
+          SLACK_ICON: "https://avatars.githubusercontent.com/u/890851?s=200&v=4"
