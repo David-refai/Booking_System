@@ -10,7 +10,7 @@ public class PingTestController {
 
     @GetMapping("/ping")
     public String ping() {
-        return "pot";
+        return "I hope this works 🙏  ";
     }
 
 
