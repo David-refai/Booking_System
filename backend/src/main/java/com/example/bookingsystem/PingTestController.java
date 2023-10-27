@@ -10,7 +10,7 @@ public class PingTestController {
 
     @GetMapping("/ping")
     public String ping() {
-        return "I hope this works from booking system test 2 ??\nit does work from booking system test 2";
+        return "I hope this works from booking system test 2 ✌️😎✌️";
     }
 
 
