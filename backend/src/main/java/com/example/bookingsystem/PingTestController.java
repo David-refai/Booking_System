@@ -13,9 +13,7 @@ public class PingTestController {
         return "pot";
     }
 
-//1. Create a new controller called PingTestController.java
 
-//
 
 
 
