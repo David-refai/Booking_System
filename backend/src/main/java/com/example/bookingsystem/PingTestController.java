@@ -18,6 +18,7 @@ public class PingTestController {
     public String ping2() {
         return "pot2";
 
+
     }
 
 
