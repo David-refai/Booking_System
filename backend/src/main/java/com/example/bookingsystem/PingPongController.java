@@ -14,13 +14,10 @@ public class PingPongController {
         return new PingPongResponse("pong from booking system test 2");
     }
 
+    @GetMapping("/ping2")
+    public PingPongResponse ping2() {
 
-
-
-
-
-
-
-
+        return new PingPongResponse("pong from booking system test 2");
+    }
 
 }
