@@ -1,0 +1,52 @@
+services:
+  db:
+    container_name: booking-system-db
+    image: postgres:15.3
+    environment:
+      POSTGRES_USER: david
+      POSTGRES_PASSWORD: password
+      PGDATA: /data/postgres
+    volumes:
+      - db:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - db
+    restart: unless-stopped
+
+#    this is the booking-system for the booking-system service in the application.yml file
+  booking-service:
+    container_name: booking-service
+    image: davidrefai/booking-system
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/bookingdb
+      SPRING_DATASOURCE_USERNAME: david
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: true
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
+      SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: true
+      SPRING_MAIN_WEB_APPLICATION_TYPE: servlet
+      SPRING_MAIN_BANNER_MODE: off
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_PROFILES_DEFAULT: prod
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "*"
+#    build:
+#      context: .
+#      dockerfile: Dockerfile # this is the dockerfile for the booking-system service
+    ports:
+      - "8080:8080"
+    networks:
+      - db
+    depends_on:
+      - db
+    restart: unless-stopped
+
+networks:
+  db:
+    driver: bridge
+
+volumes:
+  db:
+
