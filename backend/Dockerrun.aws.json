@@ -3,7 +3,7 @@
   "containerDefinitions": [
     {
       "name": "booking-system",
-      "image": "davidrefai/booking-system:28.10.2023.13.56.41",
+      "image": "davidrefai/booking-system:28.10.2023.14.40.01",
       "essential": true,
       "memory": 512,
       "portMappings": [
