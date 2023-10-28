@@ -53,7 +53,11 @@ jobs:
         run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
       - name: Slack Notification
         run: >
-          curl && curl -X POST -H 'Content-type: application/json' --data '{"text":"maven: Building with Maven Completed"}' https://hooks.slack.com/services/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
+          curl && curl -X POST -H 'Content-type: application/json'
+          --data '
+          {"text":"maven: Building with Maven Completed"}
+          ' 
+          https://hooks.slack.com/services/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
       - name: Build Package Push with Maven
         run: mvn -ntp -B verify -Ddocker.image.tags=${{ steps.build-number.outputs.BUILD_NUMBER }} jib:build
       - name: Slack Notification
