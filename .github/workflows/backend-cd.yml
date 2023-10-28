@@ -26,13 +26,13 @@ jobs:
           --health-retries 5
     defaults:
       run:
-        working-directory: /home/runner/work/Booking_System/backend
+        working-directory: /Booking_System/backend
 
     steps:
       - name: Debug Workflow
         run: |
             echo "Current Directory: $(pwd)"
-            ls -la
+            ls -l
       - name : Send Slack Notification
         run: |
           curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment Started :progress_bar: :fingerscrossed:"}' ${{ secrets.SLACK_WEBHOOK }}
