@@ -7,10 +7,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PingTestController {
 
+    private static  int counter = 0;
+
+    record PingPongResponse(String response) {}
 
     @GetMapping("/ping")
-    public String ping() {
-        return "I hope this works from booking system test 2 ✌️😎✌️";
+    public PingPongResponse ping() {
+        return new PingPongResponse("Pong: %s".formatted(counter++));
     }
 
 

@@ -29,16 +29,11 @@ jobs:
         working-directory: ./backend
     steps:
       - name : Send Slack Notification
-        uses: rtCamp/action-slack-notify@v2.0.0
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
-          SLACK_USERNAME: ${{ secrets.SLACK_USERNAME }}
-          SLACK_MESSAGE: "Deploying Booking System Backend"
-          SLACK_COLOR: "#36a64f"
-          SLACK_ICON: "https://avatars.githubusercontent.com/u/890851?s=200&v=4"
-          SLACK_TITLE: "Booking System Backend"
-
+        run: > 
+            curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment Started :progress_bar: :fingerscrossed:"}' 
+            ${{ secrets.SLACK_WEBHOOK }}
+#
+      
 
       - name: checkout code
         uses: actions/checkout@v2
@@ -53,39 +48,20 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD_TOKEN }}
-      - name: Slack Notification
-        uses: rtCamp/action-slack-notify@v2.0.0
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
-          SLACK_USERNAME: ${{ secrets.SLACK_USERNAME }}
-          SLACK_MESSAGE: "Docker Login Successful ✌️"
-          SLACK_COLOR: "#36a64f"
-          SLACK_ICON: "https://avatars.githubusercontent.com/u/890851?s=200&v=4"
       - name: Set build number
         id: build-number
         run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
       - name: Slack Notification
-        uses: rtCamp/action-slack-notify@v2.0.0
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
-          SLACK_USERNAME: ${{ secrets.SLACK_USERNAME }}
-          SLACK_MESSAGE: "Build Number: ${{ steps.build-number.outputs.BUILD_NUMBER }}"
-          SLACK_COLOR: "#36a64f"
-          SLACK_ICON: "https://avatars.githubusercontent.com/u/890851?s=200&v=4"
+        run: > 
+            curl -X POST -H 'Content-type: application/json' --data '{"text":"maven: Building with Maven Completed :white_check_mark: :tada:"}' 
+            ${{ secrets.SLACK_WEBHOOK }}
       - name: Build Package Push with Maven
         run: mvn -ntp -B verify -Ddocker.image.tags=${{ steps.build-number.outputs.BUILD_NUMBER }} jib:build
-
       - name: Slack Notification
-        uses: rtCamp/action-slack-notify@v2.0.0
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
-          SLACK_USERNAME: ${{ secrets.SLACK_USERNAME }}
-          SLACK_MESSAGE: "Build Successful ✌️"
-          SLACK_COLOR: "#36a64f"
-          SLACK_ICON: "https://avatars.githubusercontent.com/u/890851?s=200&v=4"
+        run: > 
+            curl -X POST -H 'Content-type: application/json' --data '{"text":"docker: Image tag: '${{ steps.build-number.outputs.BUILD_NUMBER }}' pushed to DockerHub :white_check_mark: :tada:"}' 
+            ${{ secrets.SLACK_WEBHOOK }}
+
       - name: Update Dockerrun.aws.json api image tag with build number
         run: |
           echo "Updating Dockerrun.aws.json before updating Elastic Beanstalk"
@@ -95,14 +71,9 @@ jobs:
           cat Dockerrun.aws.json
 
       - name: Slack Notification
-        uses: rtCamp/action-slack-notify@v2.0.0
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
-          SLACK_USERNAME: ${{ secrets.SLACK_USERNAME }}
-          SLACK_MESSAGE: "Updating Dockerrun.aws.json with new image tag"
-          SLACK_COLOR: "#36a64f"
-          SLACK_ICON: "https://avatars.githubusercontent.com/u/890851?s=200&v=4"
+        run: > 
+            curl -X POST -H 'Content-type: application/json' --data '{"text":"aws: Elastic Beanstalk Deployment Starting :progress_bar: :fingerscrossed:"}'
+            ${{ secrets.SLACK_WEBHOOK }}    
 
       - name: Deploy to AWS Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v21
@@ -118,15 +89,9 @@ jobs:
 #              wait_for_deployment: true
 #              ignore_filenames: "Dockerrun.aws.json"
       - name: Slack Notification
-        uses: rtCamp/action-slack-notify@v2.0.0
-        env:
-            SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-            SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
-            SLACK_USERNAME: ${{ secrets.SLACK_USERNAME }}
-            SLACK_MESSAGE: "Deployed to AWS Elastic Beanstalk"
-            SLACK_COLOR: "#36a64f"
-            SLACK_ICON: "https://avatars.githubusercontent.com/u/890851?s=200&v=4"
-
+        run: >
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"githubloading: Committing to repo :white_check_mark: :tada:"}'
+          ${{ secrets.SLACK_WEBHOOK }}
       - name: Commit and push Dockerrun.aws.json
         run: |
           git config  user.name "github-actions"
@@ -134,13 +99,15 @@ jobs:
           git add .
           git commit -m "Update Dockerrun.aws.json with new image tag"
           git push
+      - name: Slack Notification
+        run: >
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment and commit completed successfully :github_checks_mark: :party_blob: - https://booking-system-backend.eu-west-1.elasticbeanstalk.com/swagger-ui.html"}'
+          ${{ secrets.SLACK_WEBHOOK }}
 
       - name: Slack Notification
-        uses: rtCamp/action-slack-notify@v2.0.0
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
-          SLACK_USERNAME: ${{ secrets.SLACK_USERNAME }}
-          SLACK_MESSAGE: "Pushed Dockerrun.aws.json to Github"
-          SLACK_COLOR: "#36a64f"
-          SLACK_ICON: "https://avatars.githubusercontent.com/u/890851?s=200&v=4"
+        if: failure()
+        run: >
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Job Status ${{ job.status }} :sad_parrot: - https://booking-system-backend.eu-west-1.elasticbeanstalk.com/swagger-ui.html"}'
+          ${{ secrets.SLACK_WEBHOOK }}
+
+          
