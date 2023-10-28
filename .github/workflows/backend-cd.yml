@@ -54,19 +54,16 @@ jobs:
         id: build-number
         run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
 
-#      - name: Slack Notification
-#        run: |
-#          curl -X POST -H 'Content-type: application/json' --data '{"text":"maven: Building with Maven Completed"}' ${{ secrets.SLACK_WEBHOOK }}
+      - name: Slack Notification
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"maven: Building with Maven Completed"}' ${{ secrets.SLACK_WEBHOOK }}
 
       - name: Build Package Push with Maven
         run: mvn -ntp -B verify -Ddocker.image.tags=${{ steps.build-number.outputs.BUILD_NUMBER }} jib:build
 
       - name: Slack Notification
         run: |
-           curl -X POST -H 'Content-type: application/json' --data '{"text":"docker: Image tag:28.10.2023.13.10.20 pushed to DockerHub :tada:"}' ${{ secrets.SLACK_WEBHOOK }}
-
-      #          curl -X POST -H 'Content-type: application/json' --data '{"text":"docker: Image tag:${{ steps.build-number.outputs.BUILD_NUMBER }} pushed to DockerHub :tada:"}'
-#            ${{ secrets.SLACK_WEBHOOK }}
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"docker: Image tag:${{ steps.build-number.outputs.BUILD_NUMBER }} pushed to DockerHub :tada:"}' ${{ secrets.SLACK_WEBHOOK }}
 
       - name: Update Dockerrun.aws.json api image tag with build number
         run: |
@@ -78,8 +75,7 @@ jobs:
 
       - name: Slack Notification
         run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"aws: Elastic Beanstalk Deployment Starting :progress_bar: :fingerscrossed:"}'
-            ${{ secrets.SLACK_WEBHOOK }}    
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"aws: Elastic Beanstalk Deployment Starting :progress_bar: :fingerscrossed:"}' ${{ secrets.SLACK_WEBHOOK }}    
 
       - name: Deploy to AWS Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v21
@@ -96,8 +92,7 @@ jobs:
 #              ignore_filenames: "Dockerrun.aws.json"
       - name: Slack Notification
         run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"githubloading: Committing to repo  :tada:"}'
-          ${{ secrets.SLACK_WEBHOOK }}
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"githubloading: Committing to repo  :tada:"}' ${{ secrets.SLACK_WEBHOOK }}
       - name: Commit and push Dockerrun.aws.json
         run: |
           git config  user.name "github-actions"
@@ -105,10 +100,9 @@ jobs:
           git add .
           git commit -m "Update Dockerrun.aws.json with new image tag"
           git push
-#      - name: Slack Notification
-#        run: |
-#          curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment and commit completed successfully :github_checks_mark: :party_blob: - https://booking-system-backend.eu-west-1.elasticbeanstalk.com/swagger-ui.html"}'
-#          ${{ secrets.SLACK_WEBHOOK }}
+      - name: Slack Notification
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment and commit completed successfully :github_checks_mark: :party_blob: - https://booking-system-backend.eu-west-1.elasticbeanstalk.com/swagger-ui.html"}' ${{ secrets.SLACK_WEBHOOK }}
 #
 #      - name: Slack Notification
 #        if: always()
