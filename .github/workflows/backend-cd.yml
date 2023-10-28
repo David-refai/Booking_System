@@ -26,7 +26,7 @@ jobs:
           --health-retries 5
     defaults:
       run:
-        working-directory: ./Booking_System/Booking_System/backend
+        working-directory: ./Booking-System-2023/Booking_System/backend
 
     steps:
       - name : Send Slack Notification
