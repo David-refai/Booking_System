@@ -63,8 +63,10 @@ jobs:
 
       - name: Slack Notification
         run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"docker: Image tag:${{ steps.build-number.outputs.BUILD_NUMBER }} pushed to DockerHub :tada:"}' 
-            ${{ secrets.SLACK_WEBHOOK }}
+           curl -X POST -H 'Content-type: application/json' --data '{"text":"docker: Image tag:28.10.2023.13.10.20 pushed to DockerHub :tada:"}' ${{ secrets.SLACK_WEBHOOK }}
+
+      #          curl -X POST -H 'Content-type: application/json' --data '{"text":"docker: Image tag:${{ steps.build-number.outputs.BUILD_NUMBER }} pushed to DockerHub :tada:"}'
+#            ${{ secrets.SLACK_WEBHOOK }}
 
       - name: Update Dockerrun.aws.json api image tag with build number
         run: |
