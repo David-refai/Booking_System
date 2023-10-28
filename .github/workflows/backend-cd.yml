@@ -33,9 +33,9 @@ jobs:
 #        run: |
 #            echo "Current Directory: $(pwd)"
 #            ls -l
-#      - name : Send Slack Notification
-#        run: |
-#          curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment Started :progress_bar: :fingerscrossed:"}' ${{ secrets.SLACK_WEBHOOK }}
+      - name : Send Slack Notification
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment Started :progress_bar: :fingerscrossed:"}' ${{ secrets.SLACK_WEBHOOK }}
 
       - name: checkout code
         uses: actions/checkout@v2
@@ -104,10 +104,10 @@ jobs:
         run: |
           curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment and commit completed successfully :github_checks_mark: :party_blob: - https://booking-system-backend.eu-west-1.elasticbeanstalk.com/swagger-ui.html"}' ${{ secrets.SLACK_WEBHOOK }}
 #
-#      - name: Slack Notification
-#        if: always()
-#        run: |
-#           curl -X POST -H 'Content-type: application/json' --data '{"text":"Job Status ${{ job.status }}"}
-#          ' ${{ secrets.SLACK_WEBHOOK }}
+      - name: Slack Notification
+        if: always()
+        run: |
+           curl -X POST -H 'Content-type: application/json' --data '{"text":"Job Status ${{ job.status }}"}' ${{ secrets.SLACK_WEBHOOK }}
+      
 
           
