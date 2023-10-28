@@ -32,9 +32,6 @@ jobs:
       - name : Send Slack Notification
         run: |
           curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment Started :progress_bar: :fingerscrossed:"}' ${{ secrets.SLACK_WEBHOOK }}
-#
-      
-
       - name: checkout code
         uses: actions/checkout@v2
       - name: Set up JDK 17
