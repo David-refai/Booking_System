@@ -30,7 +30,7 @@ jobs:
 
     steps:
       - name: Slack Notification
-        if: failure()
+        if: always()
         run: >
           curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment Started :progress_bar: :fingerscrossed:"}' ${{ secrets.SLACK_WEBHOOK }}
 
