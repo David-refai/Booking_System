@@ -32,6 +32,7 @@ jobs:
       - name : Send Slack Notification
         run: |
           curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment Started :progress_bar: :fingerscrossed:"}' ${{ secrets.SLACK_WEBHOOK }}
+
       - name: checkout code
         uses: actions/checkout@v2
       - name: Set up JDK 17
@@ -48,17 +49,17 @@ jobs:
       - name: Set build number
         id: build-number
         run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
+
       - name: Slack Notification
         run: |
-          curl -X POST -H 'Content-type: application/json' --data '
-          {"text":"maven: Building with Maven Completed"}
-          ' 
-            ${{ secrets.SLACK_WEBHOOK }}
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"maven: Building with Maven Completed"}' ${{ secrets.SLACK_WEBHOOK }}
+
       - name: Build Package Push with Maven
         run: mvn -ntp -B verify -Ddocker.image.tags=${{ steps.build-number.outputs.BUILD_NUMBER }} jib:build
+
       - name: Slack Notification
         run: |
-         curl -X POST -H 'Content-type: application/json' --data '{"text":"docker: Image tag: '${{ steps.build-number.outputs.BUILD_NUMBER }}' pushed to DockerHub :tada:"}' 
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"docker: Image tag: '${{ steps.build-number.outputs.BUILD_NUMBER }}' pushed to DockerHub :tada:"}' 
             ${{ secrets.SLACK_WEBHOOK }}
 
       - name: Update Dockerrun.aws.json api image tag with build number
