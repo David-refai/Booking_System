@@ -95,7 +95,7 @@ jobs:
           git push
       - name: Slack Notification
         run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment and commit completed successfully :github_check_mark: :party_blob: - https://booking-system-backend.eu-west-1.elasticbeanstalk.com/swagger-ui.html"}' ${{ secrets.SLACK_WEBHOOK }}
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment and commit completed successfully :github_check_mark: :party_blob: - ${{secrets.EB_ENVIORMMENT_URL}}}' ${{ secrets.SLACK_WEBHOOK }}
 #
       - name: Slack Notification
         if: always()
