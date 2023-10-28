@@ -53,13 +53,13 @@ jobs:
         run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
       - name: Slack Notification
         run: > 
-            curl -X POST -H 'Content-type: application/json' --data '{"text":"maven: Building with Maven Completed :white_check_mark: :tada:"}' 
+            curl -X POST -H 'Content-type: application/json' --data '{"text":"maven: Building with Maven Completed :tada_1:"}' 
             ${{ secrets.SLACK_WEBHOOK }}
       - name: Build Package Push with Maven
         run: mvn -ntp -B verify -Ddocker.image.tags=${{ steps.build-number.outputs.BUILD_NUMBER }} jib:build
       - name: Slack Notification
         run: > 
-            curl -X POST -H 'Content-type: application/json' --data '{"text":"docker: Image tag: '${{ steps.build-number.outputs.BUILD_NUMBER }}' pushed to DockerHub :white_check_mark: :tada:"}' 
+            curl -X POST -H 'Content-type: application/json' --data '{"text":"docker: Image tag: '${{ steps.build-number.outputs.BUILD_NUMBER }}' pushed to DockerHub :tada:"}' 
             ${{ secrets.SLACK_WEBHOOK }}
 
       - name: Update Dockerrun.aws.json api image tag with build number
@@ -90,7 +90,7 @@ jobs:
 #              ignore_filenames: "Dockerrun.aws.json"
       - name: Slack Notification
         run: >
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"githubloading: Committing to repo :white_check_mark: :tada:"}'
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"githubloading: Committing to repo  :tada:"}'
           ${{ secrets.SLACK_WEBHOOK }}
       - name: Commit and push Dockerrun.aws.json
         run: |
@@ -107,7 +107,7 @@ jobs:
       - name: Slack Notification
         if: failure()
         run: >
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"Job Status ${{ job.status }} :sad_parrot: - https://booking-system-backend.eu-west-1.elasticbeanstalk.com/swagger-ui.html"}'
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Job Status ${{ job.status }}  - https://booking-system-backend.eu-west-1.elasticbeanstalk.com/swagger-ui.html"}'
           ${{ secrets.SLACK_WEBHOOK }}
 
           
