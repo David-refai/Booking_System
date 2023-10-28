@@ -26,7 +26,7 @@ jobs:
           --health-retries 5
     defaults:
       run:
-        working-directory: /Users/david/Desktop/Booking_System/backend
+        working-directory: backend
 
     steps:
 #      - name: Debug Workflow
