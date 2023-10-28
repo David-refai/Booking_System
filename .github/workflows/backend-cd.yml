@@ -42,7 +42,7 @@ jobs:
 
       - name: Slack Notification
         run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":":maven: Building with Maven Started"}' ${{ secrets.SLACK_WEBHOOK }}
+          curl -X POST -H 'Content-type: application/json' --data '{"text":":maven: Building with Maven Starting :progress_bar:"}' ${{ secrets.SLACK_WEBHOOK }}
 
       - name: Docker Login
         uses: docker/login-action@v2
@@ -55,7 +55,7 @@ jobs:
 
       - name: Slack Notification
         run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":":maven: Building with Maven Completed"}' ${{ secrets.SLACK_WEBHOOK }}
+          curl -X POST -H 'Content-type: application/json' --data '{"text":":maven: Building with Maven Completed :fingerscrossed:"}' ${{ secrets.SLACK_WEBHOOK }}
 
       - name: Build Package Push with Maven
         run: mvn -ntp -B verify -Ddocker.image.tags=${{ steps.build-number.outputs.BUILD_NUMBER }} jib:build
