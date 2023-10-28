@@ -29,9 +29,9 @@ jobs:
         working-directory: backend
 
     steps:
-      - name : Send Slack Notification
-        run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment Started :progress_bar: :fingerscrossed:"}' ${{ secrets.SLACK_WEBHOOK }}
+#      - name : Send Slack Notification
+#        run: |
+#          curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment Started :progress_bar: :fingerscrossed:"}' ${{ secrets.SLACK_WEBHOOK }}
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v3
         with:
