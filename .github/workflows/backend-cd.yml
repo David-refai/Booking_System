@@ -99,15 +99,15 @@ jobs:
           git add .
           git commit -m "Update Dockerrun.aws.json with new image tag"
           git push
-      - name: Slack Notification
-        run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment and commit completed successfully :github_checks_mark: :party_blob: - https://booking-system-backend.eu-west-1.elasticbeanstalk.com/swagger-ui.html"}'
-          ${{ secrets.SLACK_WEBHOOK }}
-
-      - name: Slack Notification
-        if: always()
-        run: |
-           curl -X POST -H 'Content-type: application/json' --data '{"text":"Job Status ${{ job.status }}"}
-          ' ${{ secrets.SLACK_WEBHOOK }}
+#      - name: Slack Notification
+#        run: |
+#          curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment and commit completed successfully :github_checks_mark: :party_blob: - https://booking-system-backend.eu-west-1.elasticbeanstalk.com/swagger-ui.html"}'
+#          ${{ secrets.SLACK_WEBHOOK }}
+#
+#      - name: Slack Notification
+#        if: always()
+#        run: |
+#           curl -X POST -H 'Content-type: application/json' --data '{"text":"Job Status ${{ job.status }}"}
+#          ' ${{ secrets.SLACK_WEBHOOK }}
 
           
