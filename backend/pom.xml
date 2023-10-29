@@ -12,8 +12,6 @@
     <groupId>com.hardcode</groupId>
     <artifactId>booking-system</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>booking-system</name>
-    <description>booking-system</description>
     <properties>
         <java.version>17</java.version>
         <docker.username>davidrefai</docker.username>
@@ -188,7 +186,7 @@
                         </platforms>
                     </from>
                     <to>
-                        <image>docker.io/${docker.username}/${docker.image.name}:${docker.image.tags}</image>
+                        <image>${docker.username}/${docker.image.name}:${docker.image.tags}</image>
                         <tags>
                             <tag>latest</tag>
                         </tags> <!-- optional -->

@@ -15,7 +15,7 @@ services:
     restart: unless-stopped
 
 #    this is the booking-system for the booking-system service in the application.yml file
-  booking-service:
+  booking-services:
     container_name: booking-system-app
     image: davidrefai/booking-system
     environment:
