@@ -31,9 +31,9 @@ jobs:
     steps:
 
       - uses: actions/checkout@v3
-      - name: Slack Notification
+      - name: Send Slack Commit github.sha
         working-directory: ./
-        run: |
+        run: >
               curl -X POST -H 'Content-type: application/json' --data '{"text": https://github.com/David-refai/Booking_System/commit/${{github.sha}} - ${{github.event.head_commit.message}} "}' ${{ secrets.SLACK_WEBHOOK }}
       - name: Slack Notification
         working-directory: ./
@@ -45,9 +45,9 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Slack Notification
-        run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":":maven: Building with Maven Starting :progress_bar:"}' ${{ secrets.SLACK_WEBHOOK }}
+#      - name: Send Slack
+#        run: >
+#          curl -X POST -H 'Content-type: application/json' --data '{"text":":maven: Building with Maven Starting :progress_bar:"}' ${{ secrets.SLACK_WEBHOOK }}
 
       - name: Docker Login
         uses: docker/login-action@v2
@@ -62,7 +62,7 @@ jobs:
         run: |
           mvn -ntp -B verify -Ddocker.image.tags=${{ steps.build-number.outputs.BUILD_NUMBER }} jib:build
 
-      - name: Slack Notification
+      - name: Docker Pushing with Maven
         run: |
           curl -X POST -H 'Content-type: application/json' --data '{"text":":docker: Image tag:${{ steps.build-number.outputs.BUILD_NUMBER }} pushed to DockerHub :tada:"}' ${{ secrets.SLACK_WEBHOOK }}
       - name: Update Dockerrun.aws.json api image tag with build number
@@ -73,7 +73,7 @@ jobs:
           echo "Updated Dockerrun.aws.json after updating Elastic Beanstalk"
           cat Dockerrun.aws.json
 
-      - name: Slack Notification
+      - name: Slack Notification that deployment is starting
         run: |
           curl -X POST -H 'Content-type: application/json' --data '{"text":":aws: Elastic Beanstalk Deployment Starting :progress_bar: :fingerscrossed:"}' ${{ secrets.SLACK_WEBHOOK }}    
 
