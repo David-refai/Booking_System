@@ -25,9 +25,14 @@ public class User {
     private String email;
     private String password;
     private String phone;
-    private String gender;
+    private String address;
+    private String city;
+    private String country;
+    private String postalCode;
     private String role;
-
+    private String status;
+    private String token;
+    private String tokenExpiry;
 
     @ManyToMany(cascade = CascadeType.REFRESH)
     @JoinTable(

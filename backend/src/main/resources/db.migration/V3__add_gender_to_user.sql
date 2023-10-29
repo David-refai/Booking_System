@@ -1,0 +1,1 @@
+alter table users add gender varchar(20);
