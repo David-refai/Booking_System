@@ -29,11 +29,17 @@ jobs:
         working-directory: backend
 
     steps:
+
+      - uses: actions/checkout@v3
       - name: Slack Notification
         working-directory: ./
         run: >
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment Started :progress_bar: :fingerscrossed:"}' ${{ secrets.SLACK_WEBHOOK }}
-      - uses: actions/checkout@v3
+              curl -X POST -H 'Content-type: application/json' --data '{"text": https://github.com/David-refai/Booking_System/commit/${{github.sha}} - ${{github.event.head_commit.message}} "}' ${{ secrets.SLACK_WEBHOOK }}
+
+      - name: Slack Notification
+        working-directory: ./
+        run: >
+            curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment Started :progress_bar: :fingerscrossed:"}' ${{ secrets.SLACK_WEBHOOK }}
       - uses: actions/setup-java@v3
         with:
           java-version: '17'
@@ -52,10 +58,6 @@ jobs:
       - name: Set build number
         id: build-number
         run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
-
-      - name: Slack Notification
-        run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":":maven: Building with Maven Completed :fingerscrossed:"}' ${{ secrets.SLACK_WEBHOOK }}
 
       - name: Build Package Push with Maven
         run: mvn -ntp -B verify -Ddocker.image.tags=${{ steps.build-number.outputs.BUILD_NUMBER }} jib:build
