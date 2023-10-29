@@ -19,7 +19,7 @@ public class PingTestController {
 
     @GetMapping("/ping2")
     public String ping2() {
-        return "potjj9";
+        return "pot9";
 
 
     }
