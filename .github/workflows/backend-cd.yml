@@ -34,7 +34,7 @@ jobs:
       - name: Send Slack Commit github.sha
         working-directory: ./
         run: >
-              curl -X POST -H 'Content-type: application/json' --data '{"text": https://github.com/David-refai/Booking_System/commit/${{github.sha}} - ${{github.event.head_commit.message}} "}' ${{ secrets.SLACK_WEBHOOK }}
+              curl -X POST -H 'Content-type: application/json' --data '{"text":"github: https://github.com/David-refai/Booking_System/commit/${{github.sha}} - ${{github.event.head_commit.message}} "}' ${{ secrets.SLACK_WEBHOOK }}
       - name: Slack Notification
         working-directory: ./
         run: >
