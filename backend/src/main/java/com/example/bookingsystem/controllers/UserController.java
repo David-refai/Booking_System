@@ -6,11 +6,12 @@ import com.example.bookingsystem.entities.User;
 import com.example.bookingsystem.services.UserService;
 import org.springframework.web.bind.annotation.*;
 
+//@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/v1")
 public class UserController {
-    private UserService userService;
-    private Logger logger = (Logger) org.slf4j.LoggerFactory.getLogger(UserController.class);
+    private final UserService userService;
+    private final Logger logger = (Logger) org.slf4j.LoggerFactory.getLogger(UserController.class);
 
     public UserController(UserService userService) {
         this.userService = userService;

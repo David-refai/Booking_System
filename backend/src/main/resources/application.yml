@@ -1,7 +1,8 @@
 server:
-  port: 8080
+  port: 8081
   error:
     include_message: always
+    include_stacktrace: always
 spring:
   application:
     name: booking_system
@@ -19,7 +20,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     properties:
       hibernate:
         show_sql: true

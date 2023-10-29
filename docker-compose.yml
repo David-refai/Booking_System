@@ -1,6 +1,6 @@
 services:
   db:
-    container_name: booking-system-db
+    container_name: booking-system-dbv1
     image: postgres:15.3
     environment:
       POSTGRES_USER: david
@@ -16,7 +16,7 @@ services:
 
 #    this is the booking-system for the booking-system service in the application.yml file
   booking-service:
-    container_name: booking-service
+    container_name: booking-system-app
     image: davidrefai/booking-system
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/bookingdb
