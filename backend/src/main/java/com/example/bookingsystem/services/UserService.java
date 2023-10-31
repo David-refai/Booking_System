@@ -54,7 +54,7 @@ public class UserService {
             }
 
             // Update the properties of the existing user with the new data
-            existingUser.setName(updatedUser.getName());
+            existingUser.setUsername(updatedUser.getUsername());
             existingUser.setEmail(updatedUser.getEmail());
             // Update other user properties as needed
 

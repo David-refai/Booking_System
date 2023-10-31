@@ -16,10 +16,17 @@ spring:
     enabled: true
     baseline-on-migrate: true
     locations: classpath:db/migration
+    schemas: bookingdb
+  http:
+    multipart:
+      max-file-size=10MB:
+      max-request-size=10MB:
+
+
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: update #create-drop #update #validate #none
     properties:
       hibernate:
         show_sql: true

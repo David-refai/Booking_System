@@ -18,19 +18,15 @@ public class User {
             name = "user_sequence",
             sequenceName = "user_sequence",
             allocationSize = 1)
-    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY
+    @GeneratedValue(strategy = GenerationType.SEQUENCE
             , generator = "user_sequence")
     private Long id;
-    private String name;
+    private String username;
     private String email;
     private String password;
-    private String phone;
-    private String address;
-    private String city;
-    private String country;
-    private String postalCode;
+
     private String role;
-    private String status;
+    private String gender;
     private String token;
     private String tokenExpiry;
 
@@ -42,6 +38,10 @@ public class User {
     )
     private Set<Trip> trips = new HashSet<>();
 
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id")
+    private Image profileImage;
     public User() {
 
     }

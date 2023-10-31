@@ -83,4 +83,22 @@ public class TripController {
         }
     }
 
+    @PostMapping("/{tripId}/addImage/{imageId}")
+    public ResponseEntity<Trip> addTripImage(
+            @PathVariable Long tripId,
+            @PathVariable Long imageId
+    ) {
+        Trip trip = tripService.addTripImage(tripId, imageId);
+        if (trip != null) {
+            return ResponseEntity.ok(trip);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+//    saveAll
+    @PostMapping("/saveAll")
+    public void saveAll(@RequestBody Iterable<Trip> trips) {
+        tripService.saveAll(trips);
+    }
 }

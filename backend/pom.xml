@@ -23,6 +23,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+<!--        web server-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web-services</artifactId>
+        </dependency>
         <!--    yaml for this fail-->
         <dependency>
             <groupId>org.yaml</groupId>
@@ -192,6 +197,18 @@
                         </tags> <!-- optional -->
                     </to>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>9.17.0</version>
+                <configuration>
+                    <url>jdbc:postgresql://localhost:5432/bookingdb</url>
+                    <user>david</user>
+                    <password>password</password>
+                </configuration>
+
             </plugin>
         </plugins>
     </build>

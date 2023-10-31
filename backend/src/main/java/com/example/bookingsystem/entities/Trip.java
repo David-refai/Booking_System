@@ -18,7 +18,8 @@ public class Trip {
             name = "trip_sequence",
             sequenceName = "trip_sequence",
             allocationSize = 1)
-    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY, generator = "trip_sequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator = "trip_sequence")
     private Long id;
     private String name;
     private String description;
@@ -54,6 +55,15 @@ public class Trip {
     )
     private Set<Addon> addons = new HashSet<>();
 
+//    image
+@OneToMany(cascade = CascadeType.ALL)
+@JoinTable(name = "trip_images",
+        joinColumns = @JoinColumn(name = "trip_id"),
+        inverseJoinColumns = @JoinColumn(name = "image_id")
+)
+    private Set<Image> images = new HashSet<>();
+
+
 //    addTripUser
     public void addTripUser(User user) {
         this.users.add(user);
@@ -85,4 +95,21 @@ public class Trip {
         addon.getTrips().remove(this);
     }
 
+    public void setTripImageUrl(String imageUrl) {
+        if (!images.isEmpty()) {
+            images.iterator().next().setImageUrl(imageUrl);
+        } else {
+            Image image = new Image();
+            image.setImageUrl(imageUrl);
+            images.add(image);
+        }
+    }
+
+    public String getTripImageUrl() {
+        if (!images.isEmpty()) {
+            return images.iterator().next().getImageUrl();
+        } else {
+            return null;
+        }
+    }
 }

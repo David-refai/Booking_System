@@ -49,7 +49,7 @@ function Rating({ rating, numReviews }) {
   );
 }
 
-function Card({ user }) {
+function UserCard({ user }) {
   return (
       <Box
         bg={useColorModeValue('white', 'gray.800')}
@@ -120,4 +120,4 @@ function Card({ user }) {
   );
 }
 
-export default Card;
+export default UserCard;

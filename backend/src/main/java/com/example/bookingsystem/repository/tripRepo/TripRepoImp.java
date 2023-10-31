@@ -34,5 +34,8 @@ public class TripRepoImp {
         return TripRepo.findAll();
     }
 
-
+// saveAll
+    public void saveAll(Iterable<Trip> trips) {
+        TripRepo.saveAll(trips);
+    }
 }

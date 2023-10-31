@@ -1,13 +1,7 @@
 package com.example.bookingsystem.services;
 
-import com.example.bookingsystem.entities.Activity;
-import com.example.bookingsystem.entities.Addon;
-import com.example.bookingsystem.entities.Trip;
-import com.example.bookingsystem.entities.User;
-import com.example.bookingsystem.repository.activityRepo.ActivityRepoImp;
+import com.example.bookingsystem.entities.*;
 import com.example.bookingsystem.repository.tripRepo.TripRepo;
-import com.example.bookingsystem.repository.tripRepo.TripRepoImp;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -20,13 +14,14 @@ public class TripService {
     private final UserService userService;
     private final ActivityService activityService;
     private final AddonService addonService;
+    private final ImageService imageService;
 
-
-    public TripService(TripRepo tripRepoImp, UserService userService, ActivityService activityService, AddonService addonService) {
+    public TripService(TripRepo tripRepoImp, UserService userService, ActivityService activityService, AddonService addonService, ImageService imageService) {
         this.tripRepoImp = tripRepoImp;
         this.userService = userService;
         this.activityService = activityService;
         this.addonService = addonService;
+        this.imageService = imageService;
     }
 
     public Trip createTrip(Trip trip) {
@@ -97,6 +92,50 @@ public class TripService {
             }
             return null;
         }
+
+        public Trip removeTripUser(Long tripId, Long userId) {
+            Trip trip = tripRepoImp.findById(tripId).orElse(null);
+            User user = userService.getUserById(userId);
+
+            if (trip != null && user != null) {
+                trip.removeTripUser(user);
+                return tripRepoImp.save(trip);
+            }
+
+            // Handle cases where the trip or user is not found
+            return null;
+        }
+
+        public Trip removeTripActivity(Long tripId, Long activityId) {
+            Trip trip = tripRepoImp.findById(tripId).orElse(null);
+            Activity activity = activityService.findById(activityId);
+
+            if (trip != null && activity != null) {
+                trip.removeTripActivity(activity);
+                return tripRepoImp.save(trip);
+            }
+
+            // Handle cases where the trip or activity is not found
+            return null;
+        }
+
+//        saveAll
+        public void saveAll(Iterable<Trip> trips) {
+            tripRepoImp.saveAll(trips);
+        }
+
+    public Trip addTripImage(Long tripId, Long imageId) {
+        Trip trip = tripRepoImp.findById(tripId).orElse(null);
+
+        Image image = imageService.findById(imageId);
+
+        if (trip != null && image != null) {
+            trip.setTripImageUrl(image.getImageUrl());
+
+            return tripRepoImp.save(trip);
+        }
+        return null;
     }
+}
 
 
