@@ -12,67 +12,31 @@ import {
   Tooltip,
   Tag,
 } from '@chakra-ui/react';
-// import { BsStar, BsStarFill, BsStarHalf } from 'react-icons/bs';
-// import { FiShoppingCart } from 'react-icons/fi';
 
-// const data = {
-//   isNew: true,
-//   imageURL:
-//     'https://images.unsplash.com/photo-1572635196237-14b3f281503f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=4600&q=80',
-//   name: 'Wayfarer Classic',
-//   price: 4.5,
-//   rating: 4.2,
-//   numReviews: 34,
-// };
 
-// function Rating({ rating, numReviews }) {
-//   return (
-//     <Box display="flex" alignItems="center">
-//       {Array(5)
-//         .fill('')
-//         .map((_, i) => {
-//           const roundedRating = Math.round(rating * 2) / 2;
-//           if (roundedRating - i >= 1) {
-//             return (
-//               <BsStarFill
-//                 key={i}
-//                 style={{ marginLeft: '1' }}
-//                 color={i < rating ? 'teal.500' : 'gray.300'}
-//               />
-//             );
-//           }
-//           if (roundedRating - i === 0.5) {
-//             return <BsStarHalf key={i} style={{ marginLeft: '1' }} />;
-//           }
-//           return <BsStar key={i} style={{ marginLeft: '1' }} />;
-//         })}
-//       <Box as="span" ml="2" color="gray.600" fontSize="sm">
-//         {numReviews} review{numReviews > 1 ? 's' : ''}
-//       </Box>
-//     </Box>
-//   );
-// }
 
 function TripCard({ trip }) {
-  const img = trip.images.map((image) => {
-    return image.imageUrl;
-  });
 
-  console.log(img);
 
-  const {
-    id,
-    name,
-    price,
-    description,
-    destination,
-    end_data,
-    start_date,
-    status,
-  } = trip;
+  const {id, name, price, start_date } = trip;
+console.log(trip);
+  const extractBase64Image = (dataURL) => {
+    if (dataURL) {
+      const splitDataURL = dataURL.split(',');
+      const matchType = splitDataURL[0].match(/:(.*?);/);
+      const type = matchType ? matchType[1] : ''; // Check for matchType before accessing index
+
+      const base64Data = splitDataURL[0];
+      return {
+        type,
+        data: base64Data,
+      };
+    }
+  };
 
   return (
     <Box
+      key={id}
       bg={useColorModeValue('white', 'gray.800')}
       maxW="sm"
       flexWrap={{ base: 'wrap', md: 'nowrap' }}
@@ -81,15 +45,24 @@ function TripCard({ trip }) {
       shadow="lg"
       position="relative"
     >
-
-      <Image
-        // if image is null, display a default image avatar
-        src={img[0] ? img[0] : 'https://bit.ly/2Z4KKcF'}
-        alt={`Picture of ${trip.name}`}
-        w={{ base: 'sm', md: 'sm' }}
-        h="250px"
-        roundedTop="lg"
-      />
+      {trip.images?.map((imageData, index) => {
+        return (
+          <Image
+            key={index}
+            src={
+              trip.images.length > 0
+                ? `data:${
+                    extractBase64Image(imageData.imageData).type
+                  };base64,${extractBase64Image(imageData.imageData).data}`
+                : 'https://picsum.photos/200/300'
+            }
+            alt={`Picture ${index + 1} of ${trip.name}`}
+            w={{ base: 'sm', md: 'sm' }}
+            h="200px"
+            roundedTop="lg"
+          />
+        );
+      })}
 
       <Box p="8">
         <Box display="flex" alignItems="baseline">
@@ -142,5 +115,7 @@ function TripCard({ trip }) {
     </Box>
   );
 }
+
+
 
 export default TripCard;

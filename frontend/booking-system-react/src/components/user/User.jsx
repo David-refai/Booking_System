@@ -1,5 +1,7 @@
-import { Card, Wrap, WrapItem } from "@chakra-ui/react";
-import React from "react";
+import { Wrap, WrapItem } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { GetUser } from "../../api/user";
+import { UserCard } from "./UserCard";
 
 export const User = () => {
     const [user, setUser] = useState([]);

@@ -31,7 +31,7 @@ import {
   FiBell,
   FiChevronDown,
 } from 'react-icons/fi';
-// import { IconType } from 'react-icons'
+import { Link, Outlet } from 'react-router-dom';
 
 const LinkItems = [
   { name: 'Home', icon: FiHome },
@@ -79,7 +79,6 @@ const SidebarContent = ({ onClose, ...rest }) => {
     </Box>
   );
 };
-
 
 const NavItem = ({ icon, children, ...rest }) => {
   return (
@@ -132,6 +131,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
       justifyContent={{ base: 'space-between', md: 'flex-end' }}
       {...rest}
     >
+     
       <IconButton
         display={{ base: 'flex', md: 'none' }}
         onClick={onOpen}
@@ -193,6 +193,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
               <MenuItem>Profile</MenuItem>
               <MenuItem>Settings</MenuItem>
               <MenuItem>Billing</MenuItem>
+             <MenuItem> <Link to="/add-new-trip">Add Trip</Link></MenuItem>
               <MenuDivider />
               <MenuItem>Sign out</MenuItem>
             </MenuList>
@@ -203,40 +204,32 @@ const MobileNav = ({ onOpen, ...rest }) => {
   );
 };
 
-import PropTypes from 'prop-types';
-
 const SidebarWithHeader = ({ children }) => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    return (
-        <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
-            <SidebarContent
-                onClose={() => onClose}
-                display={{ base: 'none', md: 'block' }}
-            />
-            <Drawer
-                isOpen={isOpen}
-                placement="left"
-                onClose={onClose}
-                returnFocusOnClose={false}
-                onOverlayClick={onClose}
-                size="full"
-            >
-                <DrawerContent>
-                    <SidebarContent onClose={onClose} />
-                </DrawerContent>
-            </Drawer>
-            <MobileNav onOpen={onOpen} />
-            <Box ml={{ base: 0, md: 60 }} p="4">
-                {children}
-            </Box>
-        </Box>
-    );
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  return (
+    <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
+      <SidebarContent
+        onClose={() => onClose}
+        display={{ base: 'none', md: 'block' }}
+      />
+      <Drawer
+        isOpen={isOpen}
+        placement="left"
+        onClose={onClose}
+        returnFocusOnClose={false}
+        onOverlayClick={onClose}
+        size="full"
+      >
+        <DrawerContent>
+          <SidebarContent onClose={onClose} />
+        </DrawerContent>
+      </Drawer>
+      <MobileNav onOpen={onOpen} />
+      <Box ml={{ base: 0, md: 60 }} p="4">
+        {children}
+      </Box>
+    </Box>
+  );
 };
-
-SidebarWithHeader.propTypes = {
-    children: PropTypes.node.isRequired,
-};
-
-    
 
 export default SidebarWithHeader;

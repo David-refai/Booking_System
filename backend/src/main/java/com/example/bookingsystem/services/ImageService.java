@@ -1,60 +1,62 @@
 package com.example.bookingsystem.services;
 
-import com.example.bookingsystem.dto.ImageDto;
 import com.example.bookingsystem.entities.Image;
-import com.example.bookingsystem.repository.image.ImageRepositoryImp;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.bookingsystem.repository.image.ImageRepo;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
+
 
 @Service
 public class ImageService {
 
-    @Autowired
-    private ImageRepositoryImp imageRepository;
+    private final ImageRepo imageRepo;
 
-    public String saveImage(MultipartFile file, String url) {
+    public ImageService(ImageRepo imageRepo) {
+        this.imageRepo = imageRepo;
+    }
+
+    public List<Image> findAll() {
+        return imageRepo.findAll();
+    }
+
+    public List<Image> getImagesByTripId(Long id) {
+        return imageRepo.getImagesByTripId(id);
+    }
+
+
+    public void resizeAndSaveImage(MultipartFile file, String savePath, int targetWidth) {
         try {
-            // Create an entity to store the image data
-            Image imageEntity = new Image();
-//             save the image from url to the entity
-            imageEntity.setImageUrl(url);
+            if (file != null && !file.isEmpty()) {
+                // Create a temporary file
+                File tempFile = File.createTempFile("temp", null);
+                file.transferTo(tempFile);
 
+                // Check a file format
+                String fileName = file.getOriginalFilename();
+                if (fileName != null && (fileName.endsWith(".jpg") || fileName.endsWith(".png") || fileName.endsWith(".gif"))) {
+                    // Resize the image using Thumbnailator
+                    Thumbnails.of(tempFile)
+                            .size(targetWidth, targetWidth) // Change targetWidth to desired width
+                            .toFile(new File(savePath));
 
-            imageEntity.setImageData(file.getBytes()); // Store the image as bytes
-
-            // Set other properties if needed (e.g., image name, type, etc.)
-            imageEntity.setImageName(file.getOriginalFilename());
-            // Set more properties as required...
-
-            // Save the image to database
-            imageRepository.saveImage(imageEntity);
-
+                    // Delete the temporary file
+                    tempFile.delete();
+                } else {
+                    System.out.println("Unsupported file format.");
+                    // Handle unsupported file formats accordingly
+                    tempFile.delete(); // Delete the temporary file
+                }
+            } else {
+                System.out.println("File is null or empty. Cannot process the image.");
+            }
         } catch (IOException e) {
-            // Handle the exception, for example, log it or return an error message
+            e.printStackTrace();
         }
-        return url;
-    }
-
-    public List<Image> getAllImages() {
-        return imageRepository.getAllImages();
-    }
-
-    public void saveImageUrl(String image) {
-        Image imageEntity = new Image();
-        imageEntity.setImageUrl(image);
-        imageRepository.saveImageUrl(imageEntity);
-    }
-
-    public Image updateImage(Long id, ImageDto imageDto) {
-        return imageRepository.updateImage(id, imageDto);
-    }
-
-    public Image findById(Long imageId) {
-        return imageRepository.findById(imageId);
     }
 }
-

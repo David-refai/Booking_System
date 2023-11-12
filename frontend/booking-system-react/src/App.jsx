@@ -1,18 +1,31 @@
-import { useEffect, useState } from 'react';
 
 import './App.css';
-import SidebarWithHeader from './components/shared/Sidebar.jsx';
-import Trip from './components/trip/Trip';
+import Trip, { loader as menuLoader } from './components/trip/Trip';
+
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import AddTripForm from './components/view/trip/AddTripForm';
+import AppLayout from './AppLayout';
 
 function App() {
 
-  return (
-    <div>
-      <SidebarWithHeader>
-        <Trip />
-      </SidebarWithHeader>
-    </div>
-  );
+  const router = createBrowserRouter([
+    {
+      element: <AppLayout />,
+      children: [
+        {
+          path: '/',
+          element: <Trip />,
+          loader: menuLoader,
+        },
+      ],
+    },
+    {
+      path: '/add-new-trip',
+      element: <AddTripForm />,
+    },
+  ]);
+
+  return <RouterProvider router={router}/>
 }
 
 export default App;

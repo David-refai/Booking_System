@@ -8,7 +8,5 @@ import lombok.Data;
 public class ImageDto {
     private byte[] imageData;
     private String ImageName; // If storing images as byte arrays
-    private String imageUrl;
-
 
 }
